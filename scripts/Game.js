@@ -38,7 +38,7 @@ class Game {
                 this.canvas.onmousemove = (event) => {
                         if (!this.clicked) return;
                         const mousePos = this.getMousePos(event);
-                        const angle = Math.atan2(mousePos.y - WIDTH_GAME / 2, mousePos.x - HEIGHT_GAME / 2);
+                        const angle = Math.atan2(mousePos.y - this.graph.fpos.y, mousePos.x - this.graph.fpos.x);
                         this.speed.x = 15 * Math.cos(angle);
                         this.speed.y = 15 * Math.sin(angle);
                 }
@@ -48,7 +48,7 @@ class Game {
                 return new Vector(
                         event.clientX - rect.left,
                         event.clientY - rect.top
-                )
+                );
         }
         render() {
                 this.graph.render();

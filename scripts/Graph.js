@@ -9,9 +9,9 @@ class Graph {
                 this.offset = new Vector();
                 this.ctx = game.ctx;
                 this.pos = pos;
+                this.fpos = new Vector(450, 350);
                 this.axis = new Vector(
-                        (this.width / 2) / this.size * this.size,
-                        (this.height / 2) / this.size * this.size
+                        300, 200
                 );
 
                 this.functions = [];
@@ -20,11 +20,16 @@ class Graph {
                 this.offset.x = vector.x - (this.width / 2);
                 this.offset.y = vector.y - (this.height / 2);
         }
-        writeText(text, position) {
+        writeText(text, position, font = 'serif') {
+                const width = this.ctx.measureText(text).width;
+                this.ctx.save();
+                this.ctx.font = font;
+                this.ctx.textBaseline = 'top';
                 this.ctx.fillStyle = 'white';
-                this.ctx.fillRect(position.x - 6, position.y - 15, 15, 20);
+                this.ctx.fillRect(position.x - (width / 2), position.y - 5, width, 20);
                 this.ctx.fillStyle = 'black';
                 this.ctx.fillText(text, position.x, position.y);
+                this.ctx.restore();
         }
         drawLine(start, end) {
                 this.ctx.beginPath();
@@ -49,32 +54,37 @@ class Graph {
                         );
                 }
         }
-        drawNumber(type) {
+        drawNumberAxis(type) {
                 const types = {
                         x: 'width',
                         y: 'height'
                 }
+                this.ctx.textAlign = 'center';
                 let f = Math.floor((this.axis[type] - this.offset[type]) / this.bigSize);
-                if (f >= (this[types[type]] / this.bigSize)) --f;
-                for (let a = this.bigSize - (this.pos[type] % this.bigSize) - this.bigSize - 0.5, i = f + 1; a <= this[types[type]]; a += this.bigSize, --i)
-                        if (i != 0) this.writeText(i, (type === 'x') ? new Vector(a, this.axis.y - this.offset.y + 20) : new Vector(this.axis.x - this.offset.x - 15, a))
+                let a = Math.floor(this.bigSize - (this.pos[type] % this.bigSize) - 0.5);
+
+                /*
+                        Actually at this moment i can't find any good Algorithm to show this grid better.
+                        So, this is a temporary fix.
+                */
+                if (this.pos[type] < 0) a -= this.bigSize;
+
+                for (let i = f; a <= this[types[type]]; a += this.bigSize, --i)
+                        if (i != 0)
+                                this.writeText(
+                                        i,
+                                        (type === 'x')
+                                        ? new Vector(a, this.axis.y - this.offset.y + 20)
+                                        : new Vector(this.axis.x - this.offset.x - 15, a)
+                                );
         }
         drawNumbers() {
                 this.ctx.font = '15px serif';
-                this.ctx.textAlign = 'center';
-                // let rows = Math.floor((this.axis.x - this.offset.x) / this.bigSize);
-                // if (rows >= (this.width / this.bigSize)) --rows;
-                // for (let x = this.bigSize - (this.pos.x % this.bigSize) - this.bigSize - 0.5, i = rows + 1; x <= this.width; x += this.bigSize, --i)
-                //         if (i != 0) this.writeText(i, new Vector(x, this.axis.y - this.offset.y + 20))
-                this.drawNumber('x');
-                this.drawNumber('y');
 
-                // let cols = Math.floor((this.axis.y - this.offset.y) / this.bigSize);
-                // if (cols >= (this.height / this.bigSize)) --cols;
-                // for (let y = this.bigSize - (this.pos.y % this.bigSize) - this.bigSize - 0.5, i = cols + 1; y <= this.height; y += this.bigSize, --i)
-                //         if (i != 0) this.writeText(i, new Vector(this.axis.x - this.offset.x - 15, y))
+                this.drawNumberAxis('x');
+                this.drawNumberAxis('y');
 
-                this.writeText(0, new Vector(this.axis.x - this.offset.x - 15, this.axis.y - this.offset.y + 20))
+                this.writeText(0, new Vector(this.axis.x - this.offset.x - 10, this.axis.y - this.offset.y + 20))
         }
         render() {
                 this.centerCamera(this.pos);
