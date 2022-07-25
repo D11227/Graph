@@ -1,14 +1,15 @@
+import GAME from './Globals.js';
 import Vector from './utilities/Vector.js';
 
 class Graph {
-        constructor({ width, height, pos, game }) {
+        constructor({ width, height, pos, offset, game }) {
                 this.width = width;
                 this.height = height;
-                this.size = 20;
-                this.bigSize = 100;
-                this.offset = new Vector();
+                this.size = GAME.SIZE;
+                this.bigSize = GAME.BIG_SIZE;
+                this.offset = offset;
                 this.ctx = game.ctx;
-                this.pos = pos;
+                this.pos = pos.copy();
                 this.fpos = pos.copy();
                 this.axis = new Vector(450, 310);
 
@@ -19,8 +20,8 @@ class Graph {
                 this.offset.y = this.pos.y - (this.height / 2);
         }
         panCamera(mouse, startPan) {
-                this.pos.x -= (mouse.x - startPan.x) * 0.2;
-                this.pos.y -= (mouse.y - startPan.y) * 0.2;
+                this.pos.x -= (mouse.x - startPan.x);
+                this.pos.y -= (mouse.y - startPan.y);
                 this.centerCamera();
         }
         writeText(text, position, font = 'serif') {

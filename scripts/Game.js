@@ -1,19 +1,13 @@
+import GAME from './Globals.js';
+
 import Graph from './Graph.js';
 import Vector from './utilities/Vector.js';
-import { WIDTH_GAME, HEIGHT_GAME } from './Globals.js';
 
 class Game {
         constructor() {
                 this.players = [];
                 this.canvas = document.getElementById('canvas');
                 this.ctx = this.canvas.getContext('2d');
-
-                this.graph = new Graph({
-                        width: WIDTH_GAME,
-                        height: HEIGHT_GAME,
-                        pos: new Vector(450, 350),
-                        game: this
-                });
 
                 this.lastTickLength = 1;
                 this.tickLengthArray = [];
@@ -23,6 +17,15 @@ class Game {
                 this.clicked = false;
                 this.mousePos = new Vector();
                 this.startPan = new Vector();
+                this.offset = new Vector();
+
+                this.graph = new Graph({
+                        width: GAME.WIDTH_GAME,
+                        height: GAME.HEIGHT_GAME,
+                        pos: new Vector(450, 350),
+                        offset: this.offset,
+                        game: this
+                });
         }
         start() {
                 window.setTimeout(() => {
@@ -36,16 +39,13 @@ class Game {
                         this.clicked = true;
                         this.startPan = this.getMousePos(event);
                 }
-                this.canvas.onmouseup = (event) => {
-                        this.clicked = false;
-                        this.startPan = new Vector();
-                }
                 this.canvas.onmousemove = (event) => {
                         if (!this.clicked) return;
                         this.mousePos = this.getMousePos(event);
                         this.graph.panCamera(this.mousePos, this.startPan);
-                        this.startPan = mousePos.copy();
+                        this.startPan = this.mousePos.copy();
                 }
+                this.canvas.onmouseup = (event) => this.clicked = false;
         }
         getMousePos(event) {
                 const rect = this.canvas.getBoundingClientRect();
@@ -62,7 +62,7 @@ class Game {
         }
         tick() {
                 this.ctx.fillStyle = 'white';
-                this.ctx.fillRect(0, 0, WIDTH_GAME, HEIGHT_GAME);
+                this.ctx.fillRect(0, 0, GAME.WIDTH_GAME, GAME.HEIGHT_GAME);
                 let lastTickLength = Date.now() - this.lastTimestamp;
                 this.lastTimestamp = Date.now();
                 this.tickLengthArray.push(lastTickLength);
