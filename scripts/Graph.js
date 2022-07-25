@@ -10,15 +10,18 @@ class Graph {
                 this.ctx = game.ctx;
                 this.pos = pos;
                 this.fpos = new Vector(450, 350);
-                this.axis = new Vector(
-                        300, 200
-                );
+                this.axis = new Vector(450, 310);
 
                 this.functions = [];
         }
-        centerCamera(vector) {
-                this.offset.x = vector.x - (this.width / 2);
-                this.offset.y = vector.y - (this.height / 2);
+        centerCamera() {
+                this.offset.x = this.pos.x - (this.width / 2);
+                this.offset.y = this.pos.y - (this.height / 2);
+        }
+        panCamera(mouse, startPan) {
+                this.pos.x -= (mouse.x - startPan.x) * 0.2;
+                this.pos.y -= (mouse.y - startPan.y) * 0.2;
+                this.centerCamera();
         }
         writeText(text, position, font = 'serif') {
                 const width = this.ctx.measureText(text).width;
@@ -87,8 +90,6 @@ class Graph {
                 this.writeText(0, new Vector(this.axis.x - this.offset.x - 10, this.axis.y - this.offset.y + 20))
         }
         render() {
-                this.centerCamera(this.pos);
-
                 this.drawGrid('lightgrey', this.size);
                 this.drawGrid('gray', this.bigSize);
                 this.drawNumbers();

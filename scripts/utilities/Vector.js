@@ -41,7 +41,7 @@ Vector.prototype.add = function(v2) {
 // add a vector to this one
 Vector.prototype.addTo = function(v2) {
 	this.x += v2.x;
-  this.y += v2.y;
+        this.y += v2.y;
 };
 
 // subtract two vectors and reutn a new one
@@ -116,6 +116,10 @@ Vector.prototype.setAngle = Vector.prototype.setDirection;
 // Utilities
 Vector.prototype.copy = function() {
   return new Vector(this.x, this.y);
+};
+
+Vector.prototype.compare = function(v) {
+  return (this.x === v.x && this.y === v.y);
 };
 
 Vector.prototype.toString = function() {

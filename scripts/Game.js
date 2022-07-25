@@ -11,7 +11,7 @@ class Game {
                 this.graph = new Graph({
                         width: WIDTH_GAME,
                         height: HEIGHT_GAME,
-                        pos: new Vector(350, 250),
+                        pos: new Vector(450, 350),
                         game: this
                 });
 
@@ -21,26 +21,29 @@ class Game {
                 this.start_time = 0;
 
                 this.clicked = false;
-                this.speed = new Vector();
+                this.mousePos = new Vector();
+                this.startPan = new Vector();
         }
         start() {
                 window.setTimeout(() => {
                     this.start_time = Date.now();
+                    this.graph.centerCamera();
                     this.tick();
                 }, 1000);
         }
         mouseEvents() {
-                this.canvas.onmousedown = (event) => this.clicked = true;
+                this.canvas.onmousedown = (event) => {
+                        this.clicked = true;
+                        this.startPan = this.getMousePos(event);
+                }
                 this.canvas.onmouseup = (event) => {
                         this.clicked = false;
-                        this.speed.x = this.speed.y = 0;
+                        this.startPan.x = this.startPan.y = 0;
                 }
                 this.canvas.onmousemove = (event) => {
                         if (!this.clicked) return;
-                        const mousePos = this.getMousePos(event);
-                        const angle = Math.atan2(mousePos.y - this.graph.fpos.y, mousePos.x - this.graph.fpos.x);
-                        this.speed.x = 15 * Math.cos(angle);
-                        this.speed.y = 15 * Math.sin(angle);
+                        this.mousePos = this.getMousePos(event);
+                        this.graph.panCamera(this.mousePos, this.startPan);
                 }
         }
         getMousePos(event) {
@@ -55,7 +58,6 @@ class Game {
         }
         update() {
                 this.mouseEvents();
-                this.graph.pos.addTo(this.speed);
         }
         tick() {
                 this.ctx.clearRect(0, 0, WIDTH_GAME, HEIGHT_GAME);
