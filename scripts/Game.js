@@ -38,12 +38,13 @@ class Game {
                 }
                 this.canvas.onmouseup = (event) => {
                         this.clicked = false;
-                        this.startPan.x = this.startPan.y = 0;
+                        this.startPan = new Vector();
                 }
                 this.canvas.onmousemove = (event) => {
                         if (!this.clicked) return;
                         this.mousePos = this.getMousePos(event);
                         this.graph.panCamera(this.mousePos, this.startPan);
+                        this.startPan = mousePos.copy();
                 }
         }
         getMousePos(event) {
@@ -60,7 +61,8 @@ class Game {
                 this.mouseEvents();
         }
         tick() {
-                this.ctx.clearRect(0, 0, WIDTH_GAME, HEIGHT_GAME);
+                this.ctx.fillStyle = 'white';
+                this.ctx.fillRect(0, 0, WIDTH_GAME, HEIGHT_GAME);
                 let lastTickLength = Date.now() - this.lastTimestamp;
                 this.lastTimestamp = Date.now();
                 this.tickLengthArray.push(lastTickLength);

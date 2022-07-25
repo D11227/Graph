@@ -9,7 +9,7 @@ class Graph {
                 this.offset = new Vector();
                 this.ctx = game.ctx;
                 this.pos = pos;
-                this.fpos = new Vector(450, 350);
+                this.fpos = pos.copy();
                 this.axis = new Vector(450, 310);
 
                 this.functions = [];
@@ -78,7 +78,7 @@ class Graph {
                                         i,
                                         (type === 'x')
                                         ? new Vector(a, this.axis.y - this.offset.y + 20)
-                                        : new Vector(this.axis.x - this.offset.x - 15, a)
+                                        : new Vector(this.axis.x - this.offset.x - (this.ctx.measureText(i).width), a - 5)
                                 );
         }
         drawNumbers() {
