@@ -1,6 +1,7 @@
 import GAME from './Globals.js';
 
 import Graph from './Graph.js';
+import Player from './Player.js';
 import Vector from './utilities/Vector.js';
 
 class Game {
@@ -20,9 +21,12 @@ class Game {
                 this.offset = new Vector();
 
                 this.graph = new Graph({
-                        width: GAME.WIDTH_GAME,
-                        height: GAME.HEIGHT_GAME,
                         pos: new Vector(450, 350),
+                        offset: this.offset,
+                        game: this
+                });
+                this.player = new Player({
+                        pos: new Vector(300, 480),
                         offset: this.offset,
                         game: this
                 });
@@ -40,12 +44,13 @@ class Game {
                         this.startPan = this.getMousePos(event);
                 }
                 this.canvas.onmousemove = (event) => {
-                        if (!this.clicked) return;
                         this.mousePos = this.getMousePos(event);
+                        if (!this.clicked) return;
                         this.graph.panCamera(this.mousePos, this.startPan);
                         this.startPan = this.mousePos.copy();
                 }
                 this.canvas.onmouseup = (event) => this.clicked = false;
+                this.player.checkCollisionWithMouse(this.mousePos);
         }
         getMousePos(event) {
                 const rect = this.canvas.getBoundingClientRect();
@@ -56,6 +61,7 @@ class Game {
         }
         render() {
                 this.graph.render();
+                this.player.render();
         }
         update() {
                 this.mouseEvents();
