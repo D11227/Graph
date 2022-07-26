@@ -5,8 +5,6 @@ class Graph {
         constructor({ width, height, pos, offset, game }) {
                 this.width = width;
                 this.height = height;
-                this.size = GAME.SIZE;
-                this.bigSize = GAME.BIG_SIZE;
                 this.offset = offset;
                 this.ctx = game.ctx;
                 this.pos = pos.copy();
@@ -64,16 +62,16 @@ class Graph {
                         y: 'height'
                 }
                 this.ctx.textAlign = 'center';
-                let f = Math.floor((this.axis[type] - this.offset[type]) / this.bigSize);
-                let a = Math.floor(this.bigSize - (this.pos[type] % this.bigSize) - 0.5);
+                let f = Math.floor((this.axis[type] - this.offset[type]) / GAME.BIG_SIZE);
+                let a = Math.floor(GAME.BIG_SIZE - (this.pos[type] % GAME.BIG_SIZE) - 0.5);
 
                 /*
                         Actually at this moment i can't find any good Algorithm to show this grid better.
                         So, this is a temporary fix.
                 */
-                if (this.pos[type] < 0) a -= this.bigSize;
+                if (this.pos[type] < 0 || a === GAME.BIG_SIZE - 1) a -= GAME.BIG_SIZE;
 
-                for (let i = f; a <= this[types[type]]; a += this.bigSize, --i)
+                for (let i = f; a <= this[types[type]]; a += GAME.BIG_SIZE, --i)
                         if (i != 0)
                                 this.writeText(
                                         i,
@@ -91,12 +89,11 @@ class Graph {
                 this.writeText(0, new Vector(this.axis.x - this.offset.x - 10, this.axis.y - this.offset.y + 20))
         }
         render() {
-                this.drawGrid('lightgrey', this.size);
-                this.drawGrid('gray', this.bigSize);
+                this.drawGrid('lightgrey', GAME.SMALL_SIZE);
+                this.drawGrid('gray', GAME.BIG_SIZE);
                 this.drawNumbers();
 
                 this.ctx.strokeStyle = 'black';
-                this.ctx.lineWidth = 3;
 
                 const axis_offset = this.axis.subtract(this.offset);
                 this.drawLine(
