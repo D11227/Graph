@@ -4,7 +4,8 @@ const GAME = {
         SMALL_SIZE: 20,
         BIG_SIZE: 100,
         DIAMETER: 16,
-        RADIUS: 8
+        RADIUS: 8,
+        SCALE: 20
 }
 
 export default GAME;

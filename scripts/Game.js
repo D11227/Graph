@@ -25,11 +25,20 @@ class Game {
                         offset: this.offset,
                         game: this
                 });
-                this.player = new Player({
-                        pos: new Vector(300, 480),
-                        offset: this.offset,
-                        game: this
-                });
+                this.players = [
+                        new Player({
+                                pos: new Vector(50, 210),
+                                offset: this.offset,
+                                game: this
+                        }),
+                        new Player({
+                                pos: new Vector(850, 210),
+                                offset: this.offset,
+                                game: this
+                        })
+                ];
+
+                this.player = this.players[0];
         }
         start() {
                 window.setTimeout(() => {
@@ -50,7 +59,7 @@ class Game {
                         this.startPan = this.mousePos.copy();
                 }
                 this.canvas.onmouseup = (event) => this.clicked = false;
-                this.player.checkCollisionWithMouse(this.mousePos);
+                this.players.map(player => player.checkCollisionWithMouse(this.mousePos));
         }
         getMousePos(event) {
                 const rect = this.canvas.getBoundingClientRect();
@@ -61,7 +70,7 @@ class Game {
         }
         render() {
                 this.graph.render();
-                this.player.render();
+                this.players.map(player => player.render());
         }
         update() {
                 this.mouseEvents();

@@ -73,7 +73,7 @@ class Graph {
                 for (let i = f; a <= GAME[types[type]]; a += GAME.BIG_SIZE, --i)
                         if (i != 0)
                                 this.writeText(
-                                        i,
+                                        (type == 'x') ? -i : i,
                                         (type === 'x')
                                         ? new Vector(a, this.axis.y - this.offset.y + 20)
                                         : new Vector(this.axis.x - this.offset.x - (this.ctx.measureText(i).width), a - 5)
