@@ -27,11 +27,13 @@ class Game {
                 });
                 this.players = [
                         new Player({
-                                pos: new Vector(50, 210),
+                                name: 'Glaba',
+                                pos: new Vector(100, 210),
                                 offset: this.offset,
                                 game: this
                         }),
                         new Player({
+                                name: 'Silverboss',
                                 pos: new Vector(850, 210),
                                 offset: this.offset,
                                 game: this
@@ -39,6 +41,7 @@ class Game {
                 ];
 
                 this.player = this.players[0];
+                this.players[1].setFunction((x) => -0.04*Math.pow(x, 2));
         }
         start() {
                 window.setTimeout(() => {
