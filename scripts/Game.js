@@ -41,7 +41,8 @@ class Game {
                 ];
 
                 this.player = this.players[0];
-                this.players[1].setFunction((x) => -0.04*Math.pow(x, 2));
+                // this.players[1].setFunction((x) => -0.04*Math.pow(x, 2));
+                this.players[0].setEnemey(this.players[1]);
         }
         start() {
                 window.setTimeout(() => {

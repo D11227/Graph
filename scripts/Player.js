@@ -12,7 +12,8 @@ class Player {
 
                 this.color = generatorColors();
                 this.collision = false;
-                this.function = (x) => 1/x;
+                this.enemy = null;
+                this.function = (x) => Math.sin(x);
         }
         checkCollisionWithMouse(mouse) {
                 const n = mouse.subtract(this.pos.subtract(this.offset));
@@ -23,6 +24,9 @@ class Player {
         }
         setFunction(func) {
                 this.function = func;
+        }
+        setEnemey(enemy) {
+                this.enemy = enemy.pos;
         }
         getColor(a = 1) {
                 return `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${a})`;
@@ -56,6 +60,7 @@ class Player {
                 this.ctx.strokeStyle = this.getColor(0.5);
 
                 const current_position = this.pos.subtract(this.game.graph.axis);
+                const enemy_position = this.enemy.subtract(this.game.graph.axis);
                 const dividedByScale = (a) => a / GAME.SCALE;
                 const render = (x) => {
                         // y(x) = scale(f(x) - f(x0) - y/scale)
@@ -73,17 +78,22 @@ class Player {
                         else this.ctx.lineTo(position.x, position.y);
                 }
 
-                if (current_position.x < 0)
-                        for (let x = current_position.x; x <= 0; ++x)
+                const max = (!Number.isFinite(this.function(0))) ? 0 : enemy_position.x;
+                if (isNaN(this.function(dividedByScale(current_position.x)))) {
+                        this.function = null;
+                        return;
+                }
+                if (current_position.x < max)
+                        for (let x = current_position.x; x <= max; ++x)
                                 render(x);
                 else
-                        for (let x = current_position.x; x >= 0; --x)
+                        for (let x = current_position.x; x >= max; --x)
                                 render(x);
 
                 this.ctx.stroke();
         }
         render() {
-                if (this.function)
+                if (this.function && this.enemy)
                         this.renderFunction();
                 this.renderPlayer();
                 this.renderName();
