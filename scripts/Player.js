@@ -11,7 +11,7 @@ class Player {
 
                 this.color = generatorColors();
                 this.collision = false;
-                this.function = (x) => 1/Math.abs(x);
+                this.function = (x) => x^2;
         }
         checkCollisionWithMouse(mouse) {
                 const n = mouse.subtract(this.pos.subtract(this.offset));
@@ -41,17 +41,27 @@ class Player {
                 this.ctx.lineWidth = 3.5;
                 this.ctx.strokeStyle = this.getColor(0.5);
 
-                let current_position = this.pos.subtract(this.game.graph.axis), y;
-                if (current_position.x < 0) for (let x = current_position.x; x <= 0; ++x) {
-                        y = GAME.BIG_SIZE * (this.function(x / GAME.BIG_SIZE) - this.function(current_position.x / GAME.BIG_SIZE) - (current_position.y / GAME.BIG_SIZE));
-                        if (x == current_position.x) this.ctx.moveTo(this.game.graph.axis.x + x - this.offset.x, this.game.graph.axis.y - y - this.offset.y);
-                        else this.ctx.lineTo(this.game.graph.axis.x + x - this.offset.x, this.game.graph.axis.y - y - this.offset.y);
+                const current_position = this.pos.subtract(this.game.graph.axis);
+                const getPosOnAxis = (a) => a / GAME.SCALE;
+                const render = (x) => {
+                        const y = GAME.SCALE *
+                                (
+                                        this.function(getPosOnAxis(x)) -
+                                        this.function(getPosOnAxis(current_position.x)) -
+                                        (getPosOnAxis(current_position.y))
+                                );
+                        if (x == current_position.x)
+                                this.ctx.moveTo(this.game.graph.axis.x + x - this.offset.x, this.game.graph.axis.y - y - this.offset.y);
+                        else
+                                this.ctx.lineTo(this.game.graph.axis.x + x - this.offset.x, this.game.graph.axis.y - y - this.offset.y);
                 }
-                else for (let x = current_position.x; x >= 0; --x) {
-                        y = GAME.BIG_SIZE * (this.function(x / GAME.BIG_SIZE) - this.function(current_position.x / GAME.BIG_SIZE) - (current_position.y / GAME.BIG_SIZE));
-                        if (x == current_position.x) this.ctx.moveTo(this.game.graph.axis.x + x - this.offset.x, this.game.graph.axis.y - y - this.offset.y);
-                        else this.ctx.lineTo(this.game.graph.axis.x + x - this.offset.x, this.game.graph.axis.y - y - this.offset.y);
-                }
+
+                if (current_position.x < 0)
+                        for (let x = current_position.x; x <= 0; ++x)
+                                render(x);
+                else
+                        for (let x = current_position.x; x >= 0; --x)
+                                render(x);
 
                 this.ctx.stroke();
         }

@@ -21,6 +21,14 @@ Vector.prototype.getMagnitude = function() {
 	return Math.sqrt(this.x * this.x + this.y * this.y);
 };
 
+// get distance from two vectors
+Vector.prototype.getDistance = function(v2) {
+	// use pythagoras theorem to work out the magnitude of the vector
+	return Math.sqrt(
+                Math.pow(this.x - v2.x, 2) + Math.pow(this.y - v2.x, 2)
+        );
+};
+
 // set the magnitude of the vector
 Vector.prototype.setMagnitude = function(magnitude) {
 	var direction = this.getDirection();

@@ -42,15 +42,15 @@ class Graph {
                 this.ctx.lineWidth = 1;
                 for (let x = sizeGrid - (this.pos.x % sizeGrid) - sizeGrid - 0.5; x <= GAME.WIDTH_GAME; x += sizeGrid) {
                         this.drawLine(
-                                { x: x, y: 0 },
-                                { x: x, y: GAME.HEIGHT_GAME }
+                                new Vector(x, 0),
+                                new Vector(x, GAME.HEIGHT_GAME)
                         );
                 }
 
                 for (let y = sizeGrid - (this.pos.y % sizeGrid) - sizeGrid - 0.5; y <= GAME.HEIGHT_GAME; y += sizeGrid) {
                         this.drawLine(
-                                { x: 0, y: y },
-                                { x: GAME.WIDTH_GAME, y: y }
+                                new Vector(0, y),
+                                new Vector(GAME.WIDTH_GAME, y)
                         );
                 }
         }
@@ -96,12 +96,12 @@ class Graph {
 
                 const axis_offset = this.axis.subtract(this.offset);
                 this.drawLine(
-                        { x: axis_offset.x, y: 0 },
-                        { x: axis_offset.x, y: GAME.HEIGHT_GAME }
+                        new Vector(axis_offset.x, 0),
+                        new Vector(axis_offset.x, GAME.HEIGHT_GAME)
                 );
                 this.drawLine(
-                        { x: 0, y: axis_offset.y },
-                        { x: GAME.WIDTH_GAME, y: axis_offset.y }
+                        new Vector(0, axis_offset.y),
+                        new Vector(GAME.WIDTH_GAME, axis_offset.y)
                 );
         }
 }
