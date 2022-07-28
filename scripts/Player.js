@@ -22,15 +22,6 @@ class Player {
 
                 this.collision = !(dist > GAME.DIAMETER);
         }
-        setFunction(func) {
-                this.function = func;
-        }
-        setEnemey(enemy) {
-                this.enemy = enemy.pos;
-        }
-        getColor(a = 1) {
-                return `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${a})`;
-        }
         renderName() {
                 const width = this.ctx.measureText(this.name).width;
                 const player_offset = this.pos.subtract(this.offset);
@@ -78,6 +69,7 @@ class Player {
                         else this.ctx.lineTo(position.x, position.y);
                 }
 
+                // Lim (x -> 0)[f(x)] = ∞
                 const max = (!Number.isFinite(this.function(0))) ? 0 : enemy_position.x;
                 if (isNaN(this.function(dividedByScale(current_position.x)))) {
                         this.function = null;
@@ -98,6 +90,10 @@ class Player {
                 this.renderPlayer();
                 this.renderName();
         }
+        /* Set / Get */
+        setFunction = (func) => this.function = func;
+        setEnemey = (enemy) => this.enemy = enemy.pos;
+        getColor = (a = 1) => `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${a})`;
 }
 
 export default Player;
