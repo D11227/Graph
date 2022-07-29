@@ -1,14 +1,17 @@
-import GAME from './Globals.js';
+import { GAME } from './Globals.js';
 
 import Graph from './Graph.js';
 import Player from './Player.js';
 import Vector from './utilities/Vector.js';
 
 class Game {
-        constructor() {
+        constructor(menu = false) {
                 this.players = [];
                 this.canvas = document.getElementById('canvas');
+                this.canvas.width = GAME.WIDTH_GAME;
+                this.canvas.height = GAME.HEIGHT_GAME;
                 this.ctx = this.canvas.getContext('2d');
+                this.menu = menu;
 
                 this.lastTickLength = 1;
                 this.tickLengthArray = [];
@@ -21,28 +24,25 @@ class Game {
                 this.offset = new Vector();
 
                 this.graph = new Graph({
-                        pos: new Vector(450, 350),
                         offset: this.offset,
                         game: this
                 });
                 this.players = [
-                        new Player({
-                                name: 'Glaba',
-                                pos: new Vector(100, 210),
-                                offset: this.offset,
-                                game: this
-                        }),
-                        new Player({
-                                name: 'Silverboss',
-                                pos: new Vector(850, 210),
-                                offset: this.offset,
-                                game: this
-                        })
+                        // new Player({
+                        //         name: 'Glaba',
+                        //         pos: new Vector(-300, 210),
+                        //         offset: this.offset,
+                        //         game: this
+                        // }),
+                        // new Player({
+                        //         name: 'Silverboss',
+                        //         pos: new Vector(850, 210),
+                        //         offset: this.offset,
+                        //         game: this
+                        // })
                 ];
 
-                this.player = this.players[0];
-                // this.players[1].setFunction((x) => -0.04*Math.pow(x, 2));
-                this.players[0].setEnemey(this.players[1]);
+                this.player = this.players[0] ?? null;
         }
         start() {
                 window.setTimeout(() => {
@@ -77,6 +77,11 @@ class Game {
                 this.players.map(player => player.render());
         }
         update() {
+                if (this.menu) {
+                        this.graph.pos.x += 2;
+                        this.graph.pos.y += 2;
+                        return;
+                }
                 this.mouseEvents();
         }
         tick() {

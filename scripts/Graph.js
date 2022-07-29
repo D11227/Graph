@@ -1,13 +1,14 @@
-import GAME from './Globals.js';
+import { GAME, getScale } from './Globals.js';
 import Vector from './utilities/Vector.js';
 
 class Graph {
-        constructor({ pos, offset, game }) {
+        constructor({ offset, game }) {
                 this.offset = offset;
+                this.game = game;
                 this.ctx = game.ctx;
-                this.pos = pos.copy();
-                this.fpos = pos.copy();
-                this.axis = new Vector(450, 310);
+                this.pos = new Vector(118 * getScale(), 290 * getScale());
+                this.fpos = new Vector(118 * getScale(), 290 * getScale());
+                this.axis = new Vector(118 * getScale(), 290 * getScale());
 
                 this.functions = [];
         }
@@ -39,7 +40,7 @@ class Graph {
         }
         drawGrid(color = 'black', sizeGrid) {
                 this.ctx.strokeStyle = color;
-                this.ctx.lineWidth = 1;
+                this.ctx.lineWidth = 1 * getScale();
                 for (let x = sizeGrid - (this.pos.x % sizeGrid) - sizeGrid - 0.5; x <= GAME.WIDTH_GAME; x += sizeGrid) {
                         this.drawLine(
                                 new Vector(x, 0),
@@ -68,7 +69,7 @@ class Graph {
                         Actually at this moment i can't find any good Algorithm to show this grid better.
                         So, this is a temporary fix.
                 */
-                if (this.pos[type] < 0 || a === GAME.BIG_SIZE - 1) a -= GAME.BIG_SIZE;
+                if (this.pos[type] < 0 || (a === GAME.BIG_SIZE - 1 && type === 'x')) a -= GAME.BIG_SIZE;
 
                 for (let i = f; a <= GAME[types[type]]; a += GAME.BIG_SIZE, --i)
                         if (i != 0)
@@ -80,7 +81,7 @@ class Graph {
                                 );
         }
         drawNumbers() {
-                this.ctx.font = '15px serif';
+                this.ctx.font = `${15 * getScale()}px serif`;
 
                 this.drawNumberAxis('x');
                 this.drawNumberAxis('y');
@@ -90,19 +91,22 @@ class Graph {
         render() {
                 this.drawGrid('lightgrey', GAME.SMALL_SIZE);
                 this.drawGrid('gray', GAME.BIG_SIZE);
-                this.drawNumbers();
 
-                this.ctx.strokeStyle = 'black';
+                if (!this.game.menu) {
+                        this.drawNumbers();
 
-                const axis_offset = this.axis.subtract(this.offset);
-                this.drawLine(
-                        new Vector(axis_offset.x, 0),
-                        new Vector(axis_offset.x, GAME.HEIGHT_GAME)
-                );
-                this.drawLine(
-                        new Vector(0, axis_offset.y),
-                        new Vector(GAME.WIDTH_GAME, axis_offset.y)
-                );
+                        this.ctx.strokeStyle = 'black';
+
+                        const axis_offset = this.axis.subtract(this.offset);
+                        this.drawLine(
+                                new Vector(axis_offset.x, 0),
+                                new Vector(axis_offset.x, GAME.HEIGHT_GAME)
+                        );
+                        this.drawLine(
+                                new Vector(0, axis_offset.y),
+                                new Vector(GAME.WIDTH_GAME, axis_offset.y)
+                        );
+                }
         }
 }
 

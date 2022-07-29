@@ -1,11 +1,11 @@
-import GAME from './Globals.js';
+import { GAME, getScale } from './Globals.js';
 import Vector from './utilities/Vector.js';
 import { generatorColors } from './utilities/Utilities.js';
 
 class Player {
         constructor({ name, pos, offset, game }) {
                 this.name = name;
-                this.pos = pos.copy();
+                this.pos = pos.multiply(getScale());
                 this.offset = offset;
                 this.game = game;
                 this.ctx = game.ctx;
@@ -27,7 +27,7 @@ class Player {
                 const player_offset = this.pos.subtract(this.offset);
 
                 this.ctx.save();
-                this.ctx.font = '15px Roboto';
+                this.ctx.font = `bold ${15 * getScale()}px Roboto`;
                 this.ctx.textBaseline = 'top';
                 this.ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
                 this.ctx.fillRect(player_offset.x - (width / 2), player_offset.y - 2 * GAME.DIAMETER - 5, width, 20);
@@ -41,13 +41,13 @@ class Player {
                 this.ctx.arc(player_offset.x, player_offset.y, GAME.RADIUS, 0, 2 * Math.PI, false);
                 this.ctx.fillStyle = this.getColor();
                 this.ctx.fill();
-                this.ctx.lineWidth = 5;
+                this.ctx.lineWidth = 5 * getScale();
                 this.ctx.strokeStyle = this.getColor(this.collision ? 0.7 : 0.2);
                 this.ctx.stroke();
         }
         renderFunction() {
                 this.ctx.beginPath();
-                this.ctx.lineWidth = 3.5;
+                this.ctx.lineWidth = 3.5 * getScale();
                 this.ctx.strokeStyle = this.getColor(0.5);
 
                 const current_position = this.pos.subtract(this.game.graph.axis);
@@ -73,6 +73,7 @@ class Player {
                 const max = (!Number.isFinite(this.function(0))) ? 0 : enemy_position.x;
                 if (isNaN(this.function(dividedByScale(current_position.x)))) {
                         this.function = null;
+                        this.enemy = null;
                         return;
                 }
                 if (current_position.x < max)

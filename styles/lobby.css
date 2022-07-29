@@ -1,0 +1,77 @@
+#lobby {
+        position: relative;
+        top: 50px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        max-width: 90vw;
+        min-height: 80vh;
+        border-radius: 5px;
+        z-index: 1;
+}
+
+#lobby .list_players {
+        padding-left: 5px;
+        position: relative;
+        background: rgba(122, 152, 222, 0.8);
+}
+
+#lobby .list_games {
+        position: relative;
+        width: 30%;
+        margin-right: 8px;
+}
+
+#lobby .list_games .title {
+        padding: 0px 5px;
+        height: 10%;
+        background: rgba(122, 152, 222, 0.8);
+}
+
+#lobby .list_games .list {
+        position: absolute;
+        bottom: 0;
+        height: 88%;
+        width: 100%;
+        background: rgba(122, 152, 222, 0.8);
+}
+
+#lobby .list_games .list ul {
+        padding: 5px;
+        margin: 10px;
+}
+
+#lobby .list_games .list li {
+        list-style-type: none;
+        cursor: pointer;
+        margin-bottom: 10px;
+}
+
+#lobby .list_chat {
+        position: relative;
+        width: 80%;
+}
+
+#lobby .list_chat .list_messages {
+        padding-left: 5px;
+        height: 90%;
+        background: rgba(122, 152, 222, 0.8);
+}
+
+#lobby .list_chat input {
+        width: 100%;
+        height: 40px;
+        padding: 12px 12px;
+        box-sizing: border-box;
+        background-color: rgba(63, 107, 209, 0.5);
+        outline: none;
+        border: none;
+        position: absolute;
+        bottom: 0;
+        font-size: 20px;
+}
+
+#lobby .list_players {
+        width: 30%;
+        margin-left: 8px;
+}
